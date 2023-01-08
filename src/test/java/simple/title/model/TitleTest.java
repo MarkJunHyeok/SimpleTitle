@@ -13,7 +13,7 @@ class TitleTest {
 
     @Test
     void 칭호_생성() {
-        Title title = Title.create("name", "description");
+        Title title = Title.create("name", "displayName", "description");
 
         assertThat(title.getName()).isEqualTo("name");
         assertThat(title.getDescription()).isEqualTo("description");
@@ -23,7 +23,15 @@ class TitleTest {
     @NullAndEmptySource
     void 칭호_생성_실패__이름이_없음(String name) {
         assertThatIllegalArgumentException().isThrownBy(() -> {
-            Title.create(name, "description");
+            Title.create(name, "displayName", "description");
+        });
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 칭호_생성_실패__표시될_이름이_없음(String displayName) {
+        assertThatIllegalArgumentException().isThrownBy(() -> {
+            Title.create("name", displayName, "description");
         });
     }
 
@@ -31,13 +39,13 @@ class TitleTest {
     @NullAndEmptySource
     void 칭호_생성_실패__설명이_없음(String description) {
         assertThatIllegalArgumentException().isThrownBy(() -> {
-            Title.create("name", description);
+            Title.create("name", "displayName", description);
         });
     }
 
     @Test
     void 칭호_이름_변경() {
-        Title title = Title.create("name", "description");
+        Title title = Title.create("name", "displayName", "description");
 
         title.changeName("changeName");
 
@@ -47,7 +55,7 @@ class TitleTest {
     @ParameterizedTest
     @NullAndEmptySource
     void 칭호_이름_변경_실패__이름이_공백(String changeName) {
-        Title title = Title.create("name", "description");
+        Title title = Title.create("name", "displayName", "description");
 
         assertThatIllegalArgumentException().isThrownBy(() -> {
             title.changeName(changeName);
@@ -55,8 +63,27 @@ class TitleTest {
     }
 
     @Test
+    void 칭호_표시될_이름_변경() {
+        Title title = Title.create("name", "displayName", "description");
+
+        title.changeDisplayName("changeDisplayName");
+
+        assertThat(title.getDisplayName()).isEqualTo("changeDisplayName");
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 칭호_표시될_이름_변경_실패__표시될_이름이_공백(String changeDisplayName) {
+        Title title = Title.create("name", "displayName", "description");
+
+        assertThatIllegalArgumentException().isThrownBy(() -> {
+            title.changeDisplayName(changeDisplayName);
+        });
+    }
+
+    @Test
     void 칭호_설명_변경() {
-        Title title = Title.create("name", "description");
+        Title title = Title.create("name", "displayName", "description");
 
         title.changeDescription("changeDescription");
 
@@ -66,7 +93,7 @@ class TitleTest {
     @ParameterizedTest
     @NullAndEmptySource
     void 칭호_설명_변경_실패__설명이_공백(String changeDescription) {
-        Title title = Title.create("name", "description");
+        Title title = Title.create("name", "displayName", "description");
 
         assertThatIllegalArgumentException().isThrownBy(() -> {
             title.changeDescription(changeDescription);
@@ -75,7 +102,7 @@ class TitleTest {
 
     @Test
     void 칭호_전용_권한_추가() {
-        Title title = Title.create("name", "description");
+        Title title = Title.create("name", "displayName", "description");
 
         Permission permission = new Permission("test.permission");
 
@@ -86,7 +113,7 @@ class TitleTest {
 
     @Test
     void 칭호_전용_권한_추가_실패__이미_있는_권한임() {
-        Title title = Title.create("name", "description");
+        Title title = Title.create("name", "displayName", "description");
 
         Permission permission = new Permission("test.permission");
 
