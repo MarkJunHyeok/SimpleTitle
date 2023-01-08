@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+}
+
+group = 'simple.title'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven {
+        name = 'papermc-repo'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    implementation 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
+    implementation 'com.google.inject:guice:5.1.0'
+    implementation 'org.yaml:snakeyaml:1.33'
+//    implementation("com.github.kangarko:Foundation:6.2.3") {
+//        exclude group: 'org.spigotmc', module: 'spigot-api'
+//        exclude group: 'org.mineacademy.plugin', module: '*'
+//    }
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    testImplementation 'com.github.MockBukkit:MockBukkit:v1.19-SNAPSHOT'
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
+
+def targetJavaVersion = 17
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
