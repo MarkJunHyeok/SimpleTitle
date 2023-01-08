@@ -1,6 +1,7 @@
 package simple.title.utils;
 
 import com.google.inject.AbstractModule;
+import simple.title.command.TitleCommand;
 import simple.title.data.TitleData;
 import simple.title.data.TitleMemoryData;
 import simple.title.service.TitleModelService;
@@ -12,5 +13,6 @@ public class BasicModule extends AbstractModule {
     protected void configure() {
         bind(TitleData.class).to(TitleMemoryData.class).asEagerSingleton();
         bind(TitleService.class).to(TitleModelService.class).asEagerSingleton();
+        bind(TitleCommand.class).asEagerSingleton();
     }
 }

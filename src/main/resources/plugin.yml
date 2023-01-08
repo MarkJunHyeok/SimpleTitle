@@ -2,3 +2,5 @@ name: SimpleTitle
 version: '${version}'
 main: simple.title.PluginMain
 api-version: 1.19
+commands:
+  칭호:
