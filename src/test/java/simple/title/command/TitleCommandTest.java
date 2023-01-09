@@ -25,16 +25,36 @@ class TitleCommandTest extends SetUpTest {
     }
 
     @Test
+    void 칭호_표시될_이름_적용() {
+        simulationTitleCreateCommand("TEST");
+
+        simulationSetDisplayNameCommand("TEST", "&6&lTEST");
+
+        Title title = titleData.getTitle("TEST");
+
+        assertThat(title.getDisplayName()).isEqualTo("&6&lTEST");
+    }
+
+    @Test
     void 칭호_목록_조회() {
         simulationTitleCreateCommand("TEST1");
 
         simulationTitleCreateCommand("TEST2");
 
-        String listCommandLine = COMMAND_NAME + " " + TITLE_LIST_COMMAND;
-        player.performCommand(listCommandLine);
+        simulationGetTitleCommand();
 
         assertTrue(player.nextMessage().contains("TEST2"));
         assertTrue(player.nextMessage().contains("TEST1"));
+    }
+
+    private void simulationSetDisplayNameCommand(String titleName, String displayName) {
+        String commandLine = COMMAND_NAME + " " + TITLE_SET_DISPLAY_NAME_COMMAND + " " + titleName + " " + displayName;
+        player.performCommand(commandLine);
+    }
+
+    private void simulationGetTitleCommand() {
+        String commandLine = COMMAND_NAME + " " + TITLE_LIST_COMMAND;
+        player.performCommand(commandLine);
     }
 
     private void simulationTitleCreateCommand(String titleName) {
