@@ -7,8 +7,8 @@ import simple.title.data.TitleData;
 import simple.title.model.Title;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static simple.title.command.TitleCommand.COMMAND_NAME;
-import static simple.title.command.TitleCommand.TITLE_CREATE_COMMAND;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static simple.title.command.TitleCommand.*;
 
 class TitleCommandTest extends SetUpTest {
 
@@ -17,14 +17,28 @@ class TitleCommandTest extends SetUpTest {
 
     @Test
     void 칭호_생성() {
-        String titleName = "TEST";
+        simulationTitleCreateCommand("TEST");
 
-        String commandLine = COMMAND_NAME + " " + TITLE_CREATE_COMMAND + " " + titleName;
-
-        player.performCommand(commandLine);
-
-        Title title = titleData.getTitle(titleName);
+        Title title = titleData.getTitle("TEST");
 
         assertThat(title.getName()).isEqualTo("TEST");
+    }
+
+    @Test
+    void 칭호_목록_조회() {
+        simulationTitleCreateCommand("TEST1");
+
+        simulationTitleCreateCommand("TEST2");
+
+        String listCommandLine = COMMAND_NAME + " " + TITLE_LIST_COMMAND;
+        player.performCommand(listCommandLine);
+
+        assertTrue(player.nextMessage().contains("TEST2"));
+        assertTrue(player.nextMessage().contains("TEST1"));
+    }
+
+    private void simulationTitleCreateCommand(String titleName) {
+        String commandLine = COMMAND_NAME + " " + TITLE_CREATE_COMMAND + " " + titleName;
+        player.performCommand(commandLine);
     }
 }
