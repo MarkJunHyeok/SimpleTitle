@@ -2,7 +2,9 @@ package simple.title.data;
 
 import simple.title.model.Title;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class TitleMemoryData implements TitleData {
@@ -17,5 +19,10 @@ public class TitleMemoryData implements TitleData {
     @Override
     public Title getTitle(String titleName) {
         return data.get(titleName);
+    }
+
+    @Override
+    public List<Title> getTitles() {
+        return new ArrayList<>(data.values());
     }
 }

@@ -1,11 +1,14 @@
 package simple.title.service;
 
 import com.google.inject.Inject;
+import org.assertj.core.api.Assertions;
 import org.bukkit.permissions.Permission;
 import org.junit.jupiter.api.Test;
 import simple.support.SetUpTest;
 import simple.title.data.TitleData;
 import simple.title.model.Title;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,5 +63,18 @@ class TitleModelServiceTest extends SetUpTest {
         Title title = titleData.getTitle("name");
 
         assertThat(title.getPermissions().get(0)).isEqualTo(permission);
+    }
+
+    @Test
+    void 칭호_목록_조회() {
+        titleService.create("1");
+        titleService.create("2");
+        titleService.create("3");
+
+        List<Title> titles = titleService.getTitles();
+
+        assertThat(titles.get(0).getName()).isEqualTo("1");
+        assertThat(titles.get(1).getName()).isEqualTo("2");
+        assertThat(titles.get(2).getName()).isEqualTo("3");
     }
 }

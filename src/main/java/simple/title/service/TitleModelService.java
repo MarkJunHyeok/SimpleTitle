@@ -5,6 +5,8 @@ import org.bukkit.permissions.Permission;
 import simple.title.data.TitleData;
 import simple.title.model.Title;
 
+import java.util.List;
+
 public class TitleModelService implements TitleService {
 
     @Inject
@@ -42,5 +44,10 @@ public class TitleModelService implements TitleService {
         title.addPermission(permission);
 
         titleData.saveData(title);
+    }
+
+    @Override
+    public List<Title> getTitles() {
+        return titleData.getTitles();
     }
 }
