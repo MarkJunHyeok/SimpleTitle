@@ -19,9 +19,8 @@ public class TitleCommand implements CommandExecutor {
     public static final String COMMAND_NAME = "칭호";
     public static final String TITLE_CREATE_COMMAND = "추가";
     public static final String TITLE_LIST_COMMAND = "목록";
-
     public static final String TITLE_SET_DISPLAY_NAME_COMMAND = "모습";
-
+    public static final String TITLE_SET_DESCRIPTION_COMMAND = "설명";
     public static final String SEND_MESSAGE_PREFIX = "&a&l" + "[ ! ] " + "&f";
 
     @Inject
@@ -33,6 +32,7 @@ public class TitleCommand implements CommandExecutor {
             createCommand(args);
             listCommand((Player) sender, args);
             setDisplayNameCommand(args);
+            setDescriptionCommand(args);
             return true;
         }
         return false;
@@ -57,12 +57,25 @@ public class TitleCommand implements CommandExecutor {
     private void setDisplayNameCommand(String[] args) {
         if (args[0].equalsIgnoreCase(TITLE_SET_DISPLAY_NAME_COMMAND)) {
             String titleName = args[1];
-            String displayName = Arrays.stream(args)
-                    .filter(it -> !it.equals(TITLE_SET_DISPLAY_NAME_COMMAND))
-                    .filter(it -> !it.equals(titleName))
-                    .collect(Collectors.joining());
+            String displayName = getTitleSetArgumentText(args, TITLE_SET_DISPLAY_NAME_COMMAND, titleName);
 
             titleService.setDisplayName(titleName, displayName);
         }
+    }
+
+    private void setDescriptionCommand(String[] args) {
+        if (args[0].equalsIgnoreCase(TITLE_SET_DESCRIPTION_COMMAND)) {
+            String titleName = args[1];
+            String description = getTitleSetArgumentText(args, TITLE_SET_DESCRIPTION_COMMAND, titleName);
+
+            titleService.setDescription(titleName, description);
+        }
+    }
+
+    private String getTitleSetArgumentText(String[] args, String commandName, String titleName) {
+        return Arrays.stream(args)
+                .filter(it -> !it.equals(commandName))
+                .filter(it -> !it.equals(titleName))
+                .collect(Collectors.joining());
     }
 }
